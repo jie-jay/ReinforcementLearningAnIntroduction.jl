@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.16.4
+# v0.17.1
 
 using Markdown
 using InteractiveUtils
@@ -99,9 +99,6 @@ end
 # ╔═╡ f0454136-5e5e-11eb-01ad-2fda9f6d0a78
 game = BlackjackEnv()
 
-# ╔═╡ f6d2fbe0-5e5e-11eb-0cae-7b9f5d343ae3
-state_space(game)
-
 # ╔═╡ dfebc2b8-5e5e-11eb-2030-4766a533b521
 md"""
 As you can see, the `state_space` of the **Blackjack** environment has 3 discrete features. To reuse the tabular algorithms in `ReinforcementLearning.jl`, we need to flatten the state and wrap it in a `StateTransformedEnv`.
@@ -118,6 +115,9 @@ world = StateTransformedEnv(
 
 # ╔═╡ 82391e12-5e5f-11eb-1eb9-f1239a781589
 RLBase.state_space(x::typeof(world)) = Base.OneTo(31* 10*2)
+
+# ╔═╡ f6d2fbe0-5e5e-11eb-0cae-7b9f5d343ae3
+state_space(game)
 
 # ╔═╡ 7e18ee70-5e5f-11eb-00aa-877362e303b3
 NS = state_space(world)

@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.16.4
+# v0.17.1
 
 using Markdown
 using InteractiveUtils
@@ -31,9 +31,6 @@ We've discussed the `RandomWalk1D` environment before. In previous example, the 
 
 # ╔═╡ 6a0881f0-5c6d-11eb-143e-0196833abc05
 ACTIONS = collect(Iterators.flatten((-100:-1, 1:100)))
-
-# ╔═╡ 7ee0867c-5c6d-11eb-11b4-a7858177564f
-NA = length(ACTIONS)
 
 # ╔═╡ 7aae4986-5c6d-11eb-09b0-fd883165bc72
 NS = 1002
@@ -256,6 +253,16 @@ begin
 	(pp::PolynomialPreprocessor)(s::Number) = [s^i for i = 0:pp.order]
 end
 
+# ╔═╡ 08d133a0-5c77-11eb-1fbb-ed6b8da42d9f
+md"""
+## Figure 9.10
+
+Implementing the tile encoding in Julia is quite easy！😀
+"""
+
+# ╔═╡ 7ee0867c-5c6d-11eb-11b4-a7858177564f
+NA = length(ACTIONS)
+
 # ╔═╡ 87c528bc-5c75-11eb-2f2f-adf254afda01
 function run_once_MC(preprocessor, order, α)
     env = StateTransformedEnv(
@@ -315,29 +322,6 @@ begin
 
 	fig_9_5
 end
-
-# ╔═╡ 08d133a0-5c77-11eb-1fbb-ed6b8da42d9f
-md"""
-## Figure 9.10
-
-Implementing the tile encoding in Julia is quite easy！😀
-"""
-
-# ╔═╡ 2ef2aa46-5c77-11eb-1eec-13ad13061214
-begin
-	struct Tiling{N,Tr<:AbstractRange}
-		ranges::NTuple{N,Tr}
-		inds::LinearIndices{N,NTuple{N,Base.OneTo{Int}}}
-	end
-	
-	Tiling(ranges...) =Tiling(
-		ranges,
-		LinearIndices(Tuple(length(r) - 1 for r in ranges))
-	)
-end
-
-# ╔═╡ 587ab40c-5c78-11eb-1776-2bfa1cf6f608
-Base.length(t::Tiling) = reduce(*, (length(r) - 1 for r in t.ranges))
 
 # ╔═╡ 592ac4a0-5c78-11eb-3d28-f7b178f4b94f
 encode(range::AbstractRange, x) = floor(Int, div(x - range[1], step(range)) + 1)
@@ -404,6 +388,22 @@ end
 md"""
 Feel free to make a PR if you can improve the speed of generating this figure. ❤
 """
+
+# ╔═╡ 587ab40c-5c78-11eb-1776-2bfa1cf6f608
+Base.length(t::Tiling) = reduce(*, (length(r) - 1 for r in t.ranges))
+
+# ╔═╡ 2ef2aa46-5c77-11eb-1eec-13ad13061214
+begin
+	struct Tiling{N,Tr<:AbstractRange}
+		ranges::NTuple{N,Tr}
+		inds::LinearIndices{N,NTuple{N,Base.OneTo{Int}}}
+	end
+	
+	Tiling(ranges...) =Tiling(
+		ranges,
+		LinearIndices(Tuple(length(r) - 1 for r in ranges))
+	)
+end
 
 # ╔═╡ Cell order:
 # ╟─41c57942-5c6c-11eb-3c99-9345b6668a1a
